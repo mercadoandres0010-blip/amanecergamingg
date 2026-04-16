@@ -45,7 +45,7 @@
             /* Expand slightly beyond screen to prevent blur clipping at the edges */
             top: -30px; left: -30px; right: -30px; bottom: -30px;
             /* We use the newly generated image path */
-            background: url('file:///C:/Users/Usuario/.gemini/antigravity/brain/eb71bf53-2523-4269-9696-32dd95a68873/anime_sunrise_1776213633028.png') no-repeat center center;
+            background: url('fondo.png') no-repeat center center;
             background-size: cover;
             filter: blur(18px) saturate(1.2); /* Very blurry always */
         }
@@ -203,12 +203,12 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 10px 20px;
             border-radius: 30px;
-            border: 1px solid rgba(255, 140, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
         .volume-control:hover {
-            border-color: rgba(255, 140, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.8);
             background: rgba(0, 0, 0, 0.8);
         }
         .volume-control input[type=range] {
@@ -221,10 +221,10 @@
             height: 16px;
             width: 16px;
             border-radius: 50%;
-            background: var(--accent-orange);
+            background: #ffffff;
             cursor: pointer;
             margin-top: -6px;
-            box-shadow: 0 0 15px var(--accent-orange);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
         .volume-control input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
@@ -235,8 +235,8 @@
         }
         .volume-icon {
             font-size: 1.3rem;
-            color: var(--accent-orange);
-            text-shadow: 0 0 10px var(--accent-orange);
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
         /* Elementos del lado para alargar el scroll */
@@ -285,10 +285,10 @@
     </style>
 </head>
 <body>
-    <!-- Reproductor nativo del video local subido por el usuario para burlar por siempre las restricciones de YouTube -->
-    <video id="local-music-video" loop style="position: fixed; top: 50%; left: 50%; z-index: -9999; opacity: 0.01; width: 100px; height: 100px; pointer-events: none;">
-        <source src="musica_fondo.mp4" type="video/mp4">
-    </video>
+    <!-- Reproductor nativo de audio local (super ligero) para música de fondo -->
+    <audio id="local-music-video" loop style="display: none;">
+        <source src="musica_fondo.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- 1. FIXED BACKGROUND (Blurry Image + Watermark) -->
     <div class="fixed-bg">
@@ -360,8 +360,8 @@
     </div>
 
     <script>
-        // Fecha objetivo: Viernes 17 de abril de 2026 a las 20:00 (8:00 PM)
-        const targetDateStr = "April 17, 2026 20:00:00";
+        // Fecha objetivo: Viernes 17 de abril de 2026 a las 21:30 (9:30 PM)
+        const targetDateStr = "April 17, 2026 21:30:00";
         const targetDate = new Date(targetDateStr).getTime();
 
         function updateCountdown() {
@@ -394,6 +394,12 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
     </script>
+
+    <!-- UI: Cambiador de Sonido (Volumen) en la esquina inferior izquierda -->
+    <div class="volume-control">
+        <span class="volume-icon" id="vol-icon">🔊</span>
+        <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="1">
+    </div>
 
     <!-- Script definitivo para reproducir el video local en bucle -->
     <script>
@@ -494,10 +500,5 @@
         }
     </script>
 
-    <!-- UI: Cambiador de Sonido (Volumen) en la esquina inferior izquierda -->
-    <div class="volume-control">
-        <span class="volume-icon" id="vol-icon">🔊</span>
-        <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="1">
-    </div>
 </body>
 </html>
