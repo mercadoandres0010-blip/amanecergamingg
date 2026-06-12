@@ -231,20 +231,25 @@ const INITIAL_DATA = {
             image: 'images/logo-liga-sakura.png',
             game: 'mlbb',
             format: 'liga',
-            status: 'proximamente',
+            status: 'abierto',
             prize: '80.000 ARG',
             price: '15.000 ARG / 11 USD',
             date: '2 Semanas',
             server: 'Argentina',
             slots: '2 Divisiones, 5 Squads por div',
             description: 'Plataforma para que equipos femeninos demuestren su habilidad.',
-            participants: ['Sakura Warriors', 'Flower Power', 'Moonlight', 'Sunlight', 'Starlight'],
+            participants: ['Usuario 1', 'Usuario 2', 'Usuario 3', 'Usuario 4', 'Usuario 5', 'Usuario 6', 'Usuario 7', 'Usuario 8', 'Usuario 9', 'Usuario 10'],
             data: [
-                { rank: 1, team: "Sakura Warriors", pj: 0, g: 0, p: 0, pts: 0 },
-                { rank: 2, team: "Flower Power", pj: 0, g: 0, p: 0, pts: 0 },
-                { rank: 3, team: "Moonlight", pj: 0, g: 0, p: 0, pts: 0 },
-                { rank: 4, team: "Sunlight", pj: 0, g: 0, p: 0, pts: 0 },
-                { rank: 5, team: "Starlight", pj: 0, g: 0, p: 0, pts: 0 }
+                { rank: 1, team: "Usuario 1", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 2, team: "Usuario 2", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 3, team: "Usuario 3", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 4, team: "Usuario 4", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 5, team: "Usuario 5", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 6, team: "Usuario 6", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 7, team: "Usuario 7", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 8, team: "Usuario 8", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 9, team: "Usuario 9", pj: 0, g: 0, p: 0, pts: 0 },
+                { rank: 10, team: "Usuario 10", pj: 0, g: 0, p: 0, pts: 0 }
             ]
         },
         {

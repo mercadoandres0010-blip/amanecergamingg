@@ -27,7 +27,7 @@ const TRANSLATIONS = {
         event_in_progress: "EVENTO EN CURSO",
         registration_closed: "INSCRIPCIONES CERRADAS",
         register_to_join: "Regístrate para Inscribirte",
-        join_now: "Inscribirme Ahora",
+        join_now: "Inscribirme",
         standings_table: "Tabla General de la Liga",
         pos: "Pos",
         team: "Equipo",

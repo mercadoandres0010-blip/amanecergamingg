@@ -25,6 +25,12 @@ const header = document.getElementById('main-header');
         localStorage.setItem('amanecer_data', JSON.stringify(APP_DATA));
     }
     
+    // Force Liga Sakura status to open
+    if (APP_DATA && APP_DATA.tournaments) {
+        const sakura = APP_DATA.tournaments.find(t => t.id === 'liga-sakura');
+        if (sakura) sakura.status = 'abierto';
+    }
+    
     // Auto-migrate old data versions
     if (APP_DATA) {
         const hasOldPaths = APP_DATA.squads && APP_DATA.squads[0].logo && !APP_DATA.squads[0].logo.startsWith('images/');
@@ -38,15 +44,18 @@ const header = document.getElementById('main-header');
         const hasOldBranding = APP_DATA.organization.name !== 'Amanecer Gaming';
         const hasAllStarsOctavos = APP_DATA.tournaments.some(t => t.id === 'liga-amanecer-all-stars' && t.data.octavos !== undefined);
         const isMissingThaiAmanecer = APP_DATA.squads && APP_DATA.squads[0] && APP_DATA.squads[0].roster.starters && !APP_DATA.squads[0].roster.starters.some(s => s.name === "Thai");
+        const isSakuraClosed = APP_DATA.tournaments && APP_DATA.tournaments.some(t => t.id === 'liga-sakura' && t.status === 'proximamente');
+        const isSakuraOldTeams = APP_DATA.tournaments && APP_DATA.tournaments.some(t => t.id === 'liga-sakura' && t.participants && t.participants.includes('Sakura Warriors'));
         
-        if (hasOldPaths || hasOldTournamentData || hasOldTeamData || hasOldSquadsData || hasOldBranding || hasAllStarsOctavos || isMissingThaiAmanecer) {
+        if (hasOldPaths || hasOldTournamentData || hasOldTeamData || hasOldSquadsData || hasOldBranding || hasAllStarsOctavos || isMissingThaiAmanecer || isSakuraClosed || isSakuraOldTeams) {
             APP_DATA = INITIAL_DATA;
             localStorage.setItem('amanecer_data', JSON.stringify(APP_DATA));
-            localStorage.setItem('amanecer_data_v', '7.0'); // Bump version to 7.0
+            localStorage.setItem('amanecer_data_v', '9.0'); // Bump version to 9.0
         }
     }
     
     let currentLang = localStorage.getItem('amanecer_lang') || 'es';
+    let currentTourneyFilter = 'all';
     
     function t(key) {
         return TRANSLATIONS[currentLang][key] || key;
@@ -138,6 +147,9 @@ const header = document.getElementById('main-header');
                             localT.data = cloudT.data;
                             if (cloudT.status) localT.status = cloudT.status;
                         }
+                        if (localT.id === 'liga-sakura') {
+                            localT.status = 'abierto';
+                        }
                         return localT;
                     });
                 }
@@ -146,6 +158,10 @@ const header = document.getElementById('main-header');
                 }
                 
                 APP_DATA = updatedAppData;
+                if (APP_DATA && APP_DATA.tournaments) {
+                    const sakura = APP_DATA.tournaments.find(t => t.id === 'liga-sakura');
+                    if (sakura) sakura.status = 'abierto';
+                }
                 localStorage.setItem('amanecer_data', JSON.stringify(APP_DATA));
 
                 if (oldSocial !== newSocial) {
@@ -552,6 +568,16 @@ const header = document.getElementById('main-header');
     function renderFilteredTournaments(format) {
         const container = document.getElementById('tournament-content');
         if(!container) return;
+        
+        const btnAll = document.getElementById('view-all');
+        const btnLiga = document.getElementById('view-liga');
+        const btnBracket = document.getElementById('view-bracket');
+        if(btnAll && btnLiga && btnBracket) {
+            btnAll.classList.toggle('active', format === 'all');
+            btnLiga.classList.toggle('active', format === 'liga');
+            btnBracket.classList.toggle('active', format === 'bracket');
+        }
+        
         const tournaments = format === 'all' 
             ? APP_DATA.tournaments
             : APP_DATA.tournaments.filter(tourn => tourn.format === format);
@@ -587,10 +613,18 @@ const header = document.getElementById('main-header');
         if(!tourney) return;
 
         const container = document.getElementById('tournament-content');
+        
+        let backLabel = t('tournaments');
+        if (currentTourneyFilter === 'liga') {
+            backLabel = t('view_liga');
+        } else if (currentTourneyFilter === 'bracket') {
+            backLabel = t('view_bracket');
+        }
+
         container.innerHTML = `
             <div class="detail-view glass" style="padding: clamp(20px, 5vw, 40px); border-radius: 20px; animation: fadeIn 0.4s ease;">
-                <button class="btn btn-outline btn-sm mb-20" onclick="window.renderFilteredTournaments('${tourney.format}')">
-                    <i class="fas fa-arrow-left"></i> ${t('back_to')} ${tourney.format === 'liga' ? t('view_liga') : t('tournaments')}
+                <button class="btn btn-outline btn-sm mb-20" onclick="window.renderFilteredTournaments('${currentTourneyFilter}')">
+                    <i class="fas fa-arrow-left"></i> ${t('back_to')} ${backLabel}
                 </button>
                 
                 <div class="detail-header" style="margin-bottom: 30px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 20px;">
@@ -1120,9 +1154,9 @@ const header = document.getElementById('main-header');
     const btnLiga = document.getElementById('view-liga');
     const btnBracket = document.getElementById('view-bracket');
     if(btnAll && btnLiga && btnBracket) {
-        btnAll.onclick = () => { renderFilteredTournaments('all'); btnAll.classList.add('active'); btnLiga.classList.remove('active'); btnBracket.classList.remove('active'); };
-        btnLiga.onclick = () => { renderFilteredTournaments('liga'); btnLiga.classList.add('active'); btnAll.classList.remove('active'); btnBracket.classList.remove('active'); };
-        btnBracket.onclick = () => { renderFilteredTournaments('bracket'); btnBracket.classList.add('active'); btnAll.classList.remove('active'); btnLiga.classList.remove('active'); };
+        btnAll.onclick = () => { currentTourneyFilter = 'all'; renderFilteredTournaments('all'); };
+        btnLiga.onclick = () => { currentTourneyFilter = 'liga'; renderFilteredTournaments('liga'); };
+        btnBracket.onclick = () => { currentTourneyFilter = 'bracket'; renderFilteredTournaments('bracket'); };
     }
 
     // --- Admin Panel Logic ---
